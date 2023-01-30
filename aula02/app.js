@@ -35,15 +35,15 @@ entradaDados.question("Digite seu nome: \n", function(nome){
         let valor1 = nota1;
 
         //Função de Callback para entrar a nota2
-        entradaDados.question("Digite a nota2 \n", function(nota2){
+        entradaDados.question("Digite a nota 2: \n", function(nota2){
             let valor2 = nota2;
 
             //Função de Callback para entrar a nota3
-            entradaDados.question("Digite a nota3 \n", function(nota3){
+            entradaDados.question("Digite a nota 3: \n", function(nota3){
                 let valor3 = nota3;
 
                 //Função de Callback para entrar a nota4
-                entradaDados.question("Digite a nota 4 \n", function(nota4){
+                entradaDados.question("Digite a nota 4: \n", function(nota4){
                     let valor4 = nota4;
                     
                     let media;
@@ -83,20 +83,30 @@ entradaDados.question("Digite seu nome: \n", function(nome){
                      *      NEGAÇÃO   !    NOT
                      */
 
-                    //Validação para entrda vazia
-                    if(valor1 == "" || valor2 == "" || valor3 == "" || valor4 == "")
-                    {
-                        console.log("ERRO: Você deixou de entrar com alguma nota")
-
-                    }else if(isNaN(valor1) || isNaN(valor2) || isNaN(valor3) || isNaN(valor4))
-                    {
+                    //Validação para entrada vazia
+                    if(valor1 == "" || valor2 == "" || valor3 == "" || valor4 == ""){
+                        console.log("ERRO: você deixou de entrar com alguma nota")
+                    
+                    //Validação para não entrada de letras
+                    }else if(isNaN(valor1) || isNaN(valor2) || isNaN(valor3) || isNaN(valor4)){
                         console.log("ERRO: você não digitou um número válido")
-                        
+
+                    //Validação para entrada de dados somente  entre 0 e 10
+                    }else if(valor1 < 0 || valor1 > 10 || valor2 < 0 || valor2 > 10 || valor3 < 0 || valor3 > 10 || valor4 < 0 || valor4 > 10){
+                        console.log("ERRO: você digitou uma nota menor que 0 ou uma nota maior que 10")
+
                     }else{
 
                         media = (parseFloat(valor1) + parseFloat(valor2) + parseFloat(valor3) + parseFloat(valor4))/4;
 
-                        console.log(nomeAluno + " sua média é: " + media);
+                        if(media < 7)
+                        {
+                            console.log("REPROVADO!")
+                        }else{
+                            console.log("APROVADO!")
+                        }
+
+                        console.log(nomeAluno + " sua média é: " + media.toFixed(1));
 
                     }
                 });
