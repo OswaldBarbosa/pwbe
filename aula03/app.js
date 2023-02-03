@@ -26,10 +26,9 @@ entradaDados.question(" Digite o primeiro valor: ", function (primeiroValor) {
         entradaDados.question(" 1 - Soma \n 2 - Subtração \n 3 - Multiplicação \n 4 - Divisão \n Digite a operação deseja: ", function (numero) {
 
             let operacao = numero;
-            let soma;
-            let subtração;
-            let multiplicacao;
-            let divisao;
+
+            let resultado;
+
 
             //Validação para caractere inválido
             if (isNaN(valor1) || isNaN(valor2) || isNaN(operacao)) {
@@ -49,19 +48,20 @@ entradaDados.question(" Digite o primeiro valor: ", function (primeiroValor) {
             }
 
             if (operacao == 1) {
-                soma = parseFloat(valor1) + parseFloat(valor2);
-                console.log(" Resultado: " + soma);
+                resultado = parseFloat(valor1) + parseFloat(valor2);
+                console.log(" Resultado: " + resultado);
 
             } else if (operacao == 2) {
-                subtração = parseFloat(valor1) - parseFloat(valor2);
-                console.log(" Resutado: " + subtração);
+                resultado = parseFloat(valor1) - parseFloat(valor2);
+                console.log(" Resultado: " + resultado);
 
             } else if (operacao == 3) {
-                multiplicacao = parseFloat(valor1) * parseFloat(valor2);
-                console.log(" Resutado: " + multiplicacao);
+                resultado = parseFloat(valor1) * parseFloat(valor2);
+                console.log(" Resultado: " + resultado);
+                
             } else if (operacao == 4) {
-                divisao = parseFloat(valor1) / parseFloat(valor2);
-                console.log(" Resutado: " + divisao);
+                resultado = parseFloat(valor1) / parseFloat(valor2);
+                console.log(" Resultado: " + resultado);
             }
 
         })
