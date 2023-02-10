@@ -35,7 +35,7 @@ entradaDados.question("Valor1: \n", function (numero1) {
 
             //Validação para entrada de dados vazio
             if (valor1 == "" || valor2 == "" || operacao == "") {
-                console.log("ERRO: Não é possível calculaar se algum dado estiver vazio");
+                console.log("ERRO: Não é possível calcular se algum dado estiver vazio");
 
                 //Validação para entrada de dados não numéricos
             } else if (isNaN(valor1) || isNaN(valor2)) {
