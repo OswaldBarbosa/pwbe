@@ -24,15 +24,10 @@ const getCalculadora = function(numero1, numero2, numero3, numero4) {
    } else {
 
       media = (nota1 + nota2 + nota3 + nota4) / 4;
+      return media
 
-   } if (media >= 70) {
-      console.log("APROVADO!")
-   } else if (media > 50 && media < 70) {
-      console.log("Aluno está de EXAME!")
-   } else if (media < 50) {
-      console.log("REPROVADO!")
-   }
-
+   } 
+   
 }
 
 module.exports  = {
