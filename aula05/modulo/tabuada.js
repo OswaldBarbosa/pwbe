@@ -1,4 +1,4 @@
-/*
+ /*
 1 - Objetivo: Arquivo de funções para calcular uma tabuada
 2 - Data: 06/02/2023
 3 - Autor: Oswaldo Barbosa
