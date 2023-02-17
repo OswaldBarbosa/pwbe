@@ -5,34 +5,92 @@
  * 4 - Versão: 1.0
  */
 
-const getCalculadora = function(numero1, numero2, numero3, numero4) {
+const getCalculadora = function (notaUm, notaDois, notaTres, notaQuatro) {
 
-   let nota1 = Number(numero1);
-   let nota2 = Number(numero2);
-   let nota3 = Number(numero3);
-   let nota4 = Number(numero4);
-   // let notas = nota1, nota2, nota3, nota4;
+   let nota1 = Number(notaUm);
+   let nota2 = Number(notaDois);
+   let nota3 = Number(notaTres);
+   let nota4 = Number(notaQuatro);
    let media;
-   let mediaExame;
+   let status = true
 
-   if (nota1 == "" || nota2 == "" || nota3 == "" || nota4 == "") {
-      console.log("ERRO: Você esqueceu de digitar algum valor")
-   } else if (nota1 > 100 || nota2 > 100 || nota3 > 100 || nota4 > 100) {
-      console.log("ERRO: Você digitou uma nota maior do que 100")
-   } else if (nota1 < 0 || nota2 < 0 || nota3 < 0 || nota4 < 0) {
-      console.log("ERRO: Você digitou uma nota menor do que 0")
-   } else {
+   media = (nota1 + nota2 + nota3 + nota4) / 4;
+   return media
 
-      media = (nota1 + nota2 + nota3 + nota4) / 4;
-      return media
-
-   } 
-   
 }
 
-module.exports  = {
-   getCalculadora
+const getExame = function (mediaDoAluno, notaDoExame) {
+   let notaExame = notaDoExame
+   let media = mediaDoAluno
+   let mediaExame
+   let status = true
+
+   mediaExame = (Number(media) + Number(notaExame)) / 2
+   return mediaExame
 }
+
+const getDefinicaoDoGeneroDoAluno = function (generoDoAluno) {
+   let generoAluno = generoDoAluno
+   let definicaoAluno
+   let status = true
+
+   if (generoAluno == "") {
+      console.log("ERRO: Você esqueceu de digitar o gênero do aluno!")
+      status = false
+   } else if (isNaN(generoAluno)) {
+      console.log("ERRO: Você digitou alguma letra no gênero do aluno!")
+      status = false
+   } else if (generoAluno > 2 || generoAluno < 1) {
+      console.log("ERRO: Você digitou uma opção inválida para o gênero do aluno")
+      status = false
+   }else if (generoAluno == 1) {
+      definicaoAluno = "O Aluno"
+      return definicaoAluno
+   } else if (generoAluno == 2) {
+      definicaoAluno = "A Aluna"
+      return definicaoAluno
+   }
+
+   return status
+
+}
+
+const getDefinicaoDoGeneroDoProfessor = function (generoDoProfessor) {
+   let generoProfessor = generoDoProfessor
+   let definicaoProfessor
+   let status = true
+
+   if (generoProfessor == "") {
+      console.log("ERRO: Você esqueceu de digitar o gênero do professor!")
+      status = false
+   } else if (isNaN(generoProfessor)) {
+      console.log("ERRO: Você digitou alguma letra no gênero do aluno!")
+      status = false
+   } else if (generoProfessor > 2 || generoProfessor < 1) {
+      console.log("ERRO: Você digitou uma opção inválida para o gênero do aluno")
+      status = false
+   } else if (isNaN(generoDoProfessor)) {
+      console.log("ERRO: Você digitou alguma letra no gênero do professor!")
+      status = false
+   } else if (generoProfessor == 1) {
+      definicaoProfessor = "Professor:"
+      return definicaoProfessor
+   } else if (generoProfessor == 2) {
+      definicaoProfessor = "Profesora:"
+      return definicaoProfessor
+   }
+
+   return status
+
+}
+
+module.exports = {
+   getCalculadora,
+   getExame,
+   getDefinicaoDoGeneroDoAluno,
+   getDefinicaoDoGeneroDoProfessor
+}
+
 
 
 
