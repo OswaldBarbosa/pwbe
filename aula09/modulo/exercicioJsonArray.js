@@ -5,8 +5,8 @@
  * 4 - Versão: 1.0
  */
 
-//importe do arquivo JSON
-var varEstadosCidades = require("../modulo/estados_cidades.js");
+//Importe do arquivo JSON
+var varEstadosCidades = require("../modulo/estados_cidades");
 
 const getListaDeEstados = function () {
     //Entrada de Dados
@@ -30,16 +30,16 @@ const getListaDeEstados = function () {
 }
 
 const getDadosEstados = function (estadoSigla) {
-        //Entrada de Dados
-        let siglaEstado = estadoSigla.toUpperCase()
-        let listaInformacoesDosEstados
-        let status
+    //Entrada de Dados
+    let siglaEstado = estadoSigla.toUpperCase()
+    let listaInformacoesDosEstados
+    let status
 
-        if (siglaEstado == ""){
-            return false
-        } else {
+    //Processamento da Função
+    if (siglaEstado == "") {
+        return false
+    } else {
 
-        //Processamento da Função
         varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
             if (estado.sigla == siglaEstado) {
                 listaInformacoesDosEstados = {
@@ -53,7 +53,7 @@ const getDadosEstados = function (estadoSigla) {
         })
 
         //Saída
-        if (status == true) {
+        if (status) {
             return listaInformacoesDosEstados
         } else {
             return false
@@ -62,17 +62,16 @@ const getDadosEstados = function (estadoSigla) {
 }
 
 const getCapitalEstado = function (estadoSigla) {
+    //Entrada de Dados
+    let siglaEstado = estadoSigla.toUpperCase()
+    let listaInformacoesDosEstados
+    let status
 
-    if (estadoSigla == "") {
+    //Processamento da Função
+    if (siglaEstado == "") {
         return false
     } else {
 
-        //Entrada de Dados
-        let siglaEstado = estadoSigla.toUpperCase()
-        let listaInformacoesDosEstados
-        let status
-
-        //Processamento da Função
         varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
             if (estado.sigla == siglaEstado) {
                 listaInformacoesDosEstados = {
@@ -100,23 +99,28 @@ const getEstadosRegiao = function (regiaoEstado) {
     let status
 
     //Processamento da Função
-    varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
-        if (estado.regiao == regiao) {
-            listaDeRegiaoJSON.regiao = estado.regiao
-            let listaDeEstadoJSON = {}
-            listaDeEstadoJSON.uf = estado.sigla
-            listaDeEstadoJSON.descricao = estado.nome
-            listaDeEstadosARRAY.push(listaDeEstadoJSON)
-        }
-        status = true
-    })
-
-    //Saída
-    if (status) {
-        listaDeRegiaoJSON.estados = listaDeEstadosARRAY
-        return listaDeRegiaoJSON
-    } else {
+    if (regiao == "") {
         return false
+    } else {
+
+        varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
+            if (estado.regiao == regiao) {
+                listaDeRegiaoJSON.regiao = estado.regiao
+                let listaDeEstadoJSON = {}
+                listaDeEstadoJSON.uf = estado.sigla
+                listaDeEstadoJSON.descricao = estado.nome
+                listaDeEstadosARRAY.push(listaDeEstadoJSON)
+            }
+            status = true
+        })
+
+        //Saída
+        if (status) {
+            listaDeRegiaoJSON.estados = listaDeEstadosARRAY
+            return listaDeRegiaoJSON
+        } else {
+            return false
+        }
     }
 }
 
@@ -149,17 +153,17 @@ const getCapitalPais = function () {
 }
 
 const getCidades = function (estadoSigla) {
+    //Entrada de Dados
+    let siglaEstado = estadoSigla.toUpperCase()
+    let listaInformacoesCidadesJSON = {}
+    let listaDeCidadesARRAY = []
+    let status
+
+    //Processamneto da Função
     if (siglaEstado == "") {
         return false
     } else {
 
-        //Entrada de Dados
-        let siglaEstado = estadoSigla
-        let listaInformacoesCidadesJSON = {}
-        let listaDeCidadesARRAY = []
-        let status
-
-        //Processamneto da Função
         varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
             if (estado.sigla == siglaEstado) {
                 listaInformacoesCidadesJSON.uf = estado.sigla

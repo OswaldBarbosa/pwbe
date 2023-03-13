@@ -25,6 +25,9 @@ const cors = require('cors')
 //Dependência para gerenciar o corpo das requisições da API
 const bodyParser = require('body-parser')
 
+//Importe do arquivo modulo
+const estadosCidades = require('./modulo/exercicioJsonArray.js')
+
 //Cria um objeto com as características do express
 const app = express()
 
@@ -52,12 +55,142 @@ app.use((request, response, next) => {
 
 //EndPoint para listar todos os estados
 app.get('/estados', cors(), async function (request, response, next) {
-    const estadosCidades = require('./modulo/exercicioJsonArray.js')
+    //Chama a função que vai listar todos os estados
     let estados = estadosCidades.getListaDeEstados()
-    response.status(200)
-    response.json(estados)
+
+    //Tratamento para validar o sucesso da requisição
+    if (estados) {
+        response.status(200)
+        response.json(estados)
+    } else {
+        response.status(500)
+    }
 })
 
+//EndPoint para listar os dados dos estados filtrando pela sigla
+app.get('/estado/:uf', cors(), async function (request, response, next) {
+    let statusCode
+    let dadosEstado = {}
+
+    //Recebe a sigla do estado que será enviada pela url da requisição
+    let siglaEstado = request.params.uf
+
+    //Tratamento para validação de etrada de dados correta
+    if (siglaEstado == "" || siglaEstado == undefined || siglaEstado.length != 2 || !isNaN(siglaEstado)) {
+        statusCode = 400
+        dadosEstado.message = 'Não foi possível processar, pois os dados de entrada (uf) que forão enviados não corresponde algo exigido, confirme o valor, pois não pode estar vazio, precisa ser caracteres e ter 2 digitos.'
+    } else {
+        //Chama a função para retornar os dados do estado
+        let estado = estadosCidades.getDadosEstados(siglaEstado)
+
+        if (estado) {
+            statusCode = 200
+            dadosEstado = estado
+        } else {
+            statusCode = 404
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dadosEstado)
+
+})
+
+app.get('/capital/:uf', cors(), async function (request, response, next) {
+    let statusCode
+    let dadosCapitais = {}
+
+    let siglaEstado = request.params.uf
+
+    if (siglaEstado == "" || siglaEstado == undefined || siglaEstado.length != 2 || !isNaN(siglaEstado)) {
+        statusCode = 400
+        dadosCapitais.message = 'Não foi possível processar, pois os dados de entrada (uf) que forão enviados não corresponde algo exigido, confirme o valor, pois não pode estar vazio, precisa ser caracteres e ter 2 digitos.'
+    } else {
+        let capitais = estadosCidades.getCapitalEstado(siglaEstado)
+
+        if (capitais) {
+            statusCode = 200
+            dadosCapitais = capitais
+        } else {
+            statusCode = 404
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dadosCapitais)
+
+})
+
+app.get('/regiao/:regiao', cors(), async function (request, response, next) {
+    let statusCode
+    let dadosRegioes = {}
+
+    let nomeDaRegiao = request.params.regiaogit
+
+    if (nomeDaRegiao == "" || nomeDaRegiao == undefined || !isNaN(nomeDaRegiao)) {
+        statusCode = 400
+        dadosRegioes.message = 'Não foi possível processar, pois os dados de entrada (região) que forão enviados não corresponde algo exigido, confirme o valor, pois não pode estar vazio, precisa ser caracteres e ter 2 digitos.'
+    } else {
+        let regiao = estadosCidades.getEstadosRegiao(nomeDaRegiao)
+
+        if (regiao) {
+            statusCode = 200
+            dadosRegioes = regiao
+        } else {
+            statusCode = 404
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dadosRegioes)
+
+})
+
+app.get('/capital', cors(), async function (request, response, next) {
+    let statusCode
+    let dadosCapitais = {}
+
+    let capitalPais = estadosCidades.getCapitalPais()
+
+    if (capitalPais) {
+        statusCode = 200
+        dadosCapitais = capitalPais
+        // response.json(capitalPais)
+    } else {
+        statusCode = 500
+    }
+
+    response.status(statusCode)
+    response.json(dadosCapitais)
+
+})
+
+app.get('/cidades/:uf', cors(), async function (request, response, next) {
+    let statusCode
+    let dadosCidades = {}
+
+    let siglaEstado = request.params.uf
+
+    if (siglaEstado == "" || siglaEstado == undefined || siglaEstado.length != 2 || !isNaN(siglaEstado)) {
+        statusCode = 400
+        dadosCidades.message = 'Não foi possível processar, pois os dados de entrada (uf) que forão enviados não corresponde algo exigido, confirme o valor, pois não pode estar vazio, precisa ser caracteres e ter 2 digitos.'
+    } else {
+        let cidades = estadosCidades.getCidades(siglaEstado)
+
+        if (cidades) {
+            statusCode = 200
+            dadosCidades = cidades
+        } else {
+            statusCode = 404
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dadosCidades)
+
+})
+
+//Roda o serviço da API para ficar aguardando requisições
 app.listen(8080, function () {
     console.log('SERVIDOR AGUARDANDO REQUISIÇÕES NA PORTA 8080.')
 })
