@@ -6,13 +6,47 @@
  ************************************************************************************
  */
 
+
+
 //retorna a lista de todos os alunos
-const getAlunos = () => {
+const getAlunos = async () => {
+    let dadosAlunosJSON = {}
+
+    //Importe do arquivo DAO para acessar dados do aluno no banco de dados
+    let alunoDAO = require('../model/DAO/alunoDAO.js')
+
+    //Chama a função do arquivo DAO que irá retorna todos os registros do banco de dados
+    let dadosAlunos = await alunoDAO.selectAllAluno()
+
+    if (dadosAlunos) {
+        //Criando um JSON com o atributo alunos, para encaminhar um ARRAY de alunos
+        dadosAlunosJSON.quantidade = dadosAlunos.length
+        dadosAlunosJSON.alunos = dadosAlunos
+        return dadosAlunosJSON
+    } else {
+        return false
+    }
 
 }
 
 //retorna o aluno filtrando pelo ID
-const getBuscarAlunoId = (id) => {
+const getBuscarAlunoId = async (id) => {
+    let idAluno = id
+    let dadosAlunosJSON = {}
+
+    //Importe do arquivo DAO para acessar dados do aluno no banco de dados
+    let alunoDAO = require('../model/DAO/alunoDAO.js')
+
+    //Chama a função do arquivo DAO que irá retorna todos os registros do banco de dados
+    let dadosAlunos = await alunoDAO.selectByIdAluno(idAluno)
+
+    if (dadosAlunos) {
+        dadosAlunosJSON.quantidade = dadosAlunos.length
+        dadosAlunosJSON.aluno = dadosAlunos
+        return dadosAlunosJSON
+    } else {
+        return false
+    }
 
 }
 
@@ -31,3 +65,7 @@ const deletarAluno = (id) => {
 
 }
 
+module.exports = {
+    getAlunos,
+    getBuscarAlunoId
+}

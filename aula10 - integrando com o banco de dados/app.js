@@ -37,13 +37,57 @@ app.use((request, response, next) => {
  ************************************************************************************
  */
 
+
+/**
+ * Instalação do PRISMA no projeto (biblioteca para conexão com o banco de dados )
+ * 
+ * npm install prisma --save
+ * npx prisma
+ * npx prisma init
+ * npm install @prisma/client --save
+ * 
+ * npx prisma migrate dev - servepara realizar a sincronização entre o prisma e banco de dados
+ */
+
+
+
 //endpoint: retorna todos os dados de alunos
 app.get('/v1/lion-school/aluno/', cors(), async function (request, response) {
+    //Importe da controller do aluno
+    let controllerAlunos = require('./controller/controller_aluno.js')
+
+    //Recebe os dados da controller do aluno
+    let dadosAlunos = await controllerAlunos.getAlunos()
+
+    //verifica se existe registros do alunos
+    if (dadosAlunos) {
+        response.json(dadosAlunos)
+        response.status(200)
+    } else {
+        response.json()
+        response.status(404)
+    }
 
 })
 
 //endpoint: retorna o aluno filtrando pelo ID
 app.get('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+    let idAluno = request.params.id
+
+    //Importe da controller do aluno
+    let controllerAlunos = require('./controller/controller_aluno.js')
+
+    //Recebe os dados da controller do aluno
+    let dadosAlunos = await controllerAlunos.getBuscarAlunoId(idAluno)
+
+    //verifica se existe registros do alunos
+    if (dadosAlunos) {
+        response.json(dadosAlunos)
+        response.status(200)
+    } else {
+        response.json()
+        response.status(404)
+    }
 
 })
 

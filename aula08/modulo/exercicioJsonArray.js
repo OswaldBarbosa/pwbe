@@ -30,15 +30,14 @@ const getListaDeEstados = function () {
 }
 
 const getDadosEstados = function (estadoSigla) {
-
-    if (estadoSigla == "") {
-        return false
-    } else {
-
         //Entrada de Dados
         let siglaEstado = estadoSigla.toUpperCase()
         let listaInformacoesDosEstados
         let status
+
+        if (siglaEstado == ""){
+            return false
+        } else {
 
         //Processamento da Função
         varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
@@ -150,30 +149,36 @@ const getCapitalPais = function () {
 }
 
 const getCidades = function (estadoSigla) {
-    //Entrada de Dados
-    let siglaEstado = estadoSigla
-    let listaInformacoesCidadesJSON = {}
-    let listaDeCidadesARRAY = []
-    let status
-
-    //Processamneto da Função
-    varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
-        if (estado.sigla == siglaEstado) {
-            listaInformacoesCidadesJSON.uf = estado.sigla
-            listaInformacoesCidadesJSON.descricao = estado.nome
-            listaInformacoesCidadesJSON.quantidade_cidades = estado.cidades.length
-            estado.cidades.forEach(function (estadoCidade) {
-                listaDeCidadesARRAY.push(estadoCidade.nome)
-            })
-            listaInformacoesCidadesJSON.cidades = listaDeCidadesARRAY
-        }
-        status = true
-    })
-
-    //Saída
-    if (status) {
-        return listaInformacoesCidadesJSON
-    } else {
+    if (siglaEstado == "") {
         return false
+    } else {
+
+        //Entrada de Dados
+        let siglaEstado = estadoSigla
+        let listaInformacoesCidadesJSON = {}
+        let listaDeCidadesARRAY = []
+        let status
+
+        //Processamneto da Função
+        varEstadosCidades.estadosCidades.estados.forEach(function (estado) {
+            if (estado.sigla == siglaEstado) {
+                listaInformacoesCidadesJSON.uf = estado.sigla
+                listaInformacoesCidadesJSON.descricao = estado.nome
+                listaInformacoesCidadesJSON.quantidade_cidades = estado.cidades.length
+                estado.cidades.forEach(function (estadoCidade) {
+                    listaDeCidadesARRAY.push(estadoCidade.nome)
+                })
+                listaInformacoesCidadesJSON.cidades = listaDeCidadesARRAY
+            }
+            status = true
+        })
+
+        //Saída
+        if (status) {
+            return listaInformacoesCidadesJSON
+        } else {
+            return false
+        }
     }
 }
+

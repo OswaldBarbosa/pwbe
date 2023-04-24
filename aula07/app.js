@@ -218,14 +218,24 @@ const listagemProdutos = function () {
     listProdutosJSON.produtos[4].modelos = listModelosTeclado
     listProdutosJSON.produtos[5].modelos = listModelosTeclado
 
-    // console.log('Nome: ' + listProdutosJSON.produtos.nome)
-    // console.log('Marca: ' + listProdutosJSON.produtos.marca)
-    // console.log('Valor: ' + listProdutosJSON.produtos.valor)
-    // console.log('Cor: ' + listProdutosJSON.produtos.cores)
-    // console.log('Modelo: ' + listProdutosJSON.produtos.modelos)
+    listProdutosARRAY.forEach(function (produto) {
+        console.log('Nome: ' + produto.nome)
+        console.log('Marca: ' + produto.marca)
+        console.log('Valor: ' + produto.valor)
 
-    listProdutosARRAY.forEach(function(produto){
-        console.log('Nome: ' + produto.nome + ' Marca: ' + produto.marca + ' Valor: ' + produto.valor + ' Cores: ' + produto.cores + ' Modelo: ' + produto.modelos)
+        produto.cores.forEach(function (produtoCor) {
+            //Tratamento de erro para quando não existir ARRAYS de cores
+            if (produto.cores != undefined) {
+                console.log('Cor: ' + produtoCor)
+            }
+        })
+        
+        //Tratamento de erro para quando não existir ARRAYS de modelos
+        if (produto.modelos != undefined) {
+            produto.modelos.forEach(function (produtoModelo) {
+                console.log('Modelo: ' + produtoModelo)
+            })
+        }
     })
 }
 

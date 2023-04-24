@@ -54,7 +54,7 @@ app.use((request, response, next) => {
 //do ar 
 
 //EndPoint para listar todos os estados
-app.get('/estados', cors(), async function (request, response, next) {
+app.get('/senai/estados', cors(), async function (request, response, next) {
     //Chama a função que vai listar todos os estados
     let estados = estadosCidades.getListaDeEstados()
 
@@ -68,7 +68,7 @@ app.get('/estados', cors(), async function (request, response, next) {
 })
 
 //EndPoint para listar os dados dos estados filtrando pela sigla
-app.get('/estado/:uf', cors(), async function (request, response, next) {
+app.get('/senai/estado/:uf', cors(), async function (request, response, next) {
     let statusCode
     let dadosEstado = {}
 
@@ -96,7 +96,7 @@ app.get('/estado/:uf', cors(), async function (request, response, next) {
 
 })
 
-app.get('/capital/:uf', cors(), async function (request, response, next) {
+app.get('/senai/capital/:uf', cors(), async function (request, response, next) {
     let statusCode
     let dadosCapitais = {}
 
@@ -121,7 +121,7 @@ app.get('/capital/:uf', cors(), async function (request, response, next) {
 
 })
 
-app.get('/regiao/:regiao', cors(), async function (request, response, next) {
+app.get('/senai/regiao/nome/:regiao', cors(), async function (request, response, next) {
     let statusCode
     let dadosRegioes = {}
 
@@ -146,7 +146,7 @@ app.get('/regiao/:regiao', cors(), async function (request, response, next) {
 
 })
 
-app.get('/capital', cors(), async function (request, response, next) {
+app.get('/senai/capital', cors(), async function (request, response, next) {
     let statusCode
     let dadosCapitais = {}
 
@@ -165,7 +165,7 @@ app.get('/capital', cors(), async function (request, response, next) {
 
 })
 
-app.get('/cidades/:uf', cors(), async function (request, response, next) {
+app.get('/v1/senai/cidades/estado/sigla/:uf', cors(), async function (request, response, next) {
     let statusCode
     let dadosCidades = {}
 
@@ -187,6 +187,41 @@ app.get('/cidades/:uf', cors(), async function (request, response, next) {
 
     response.status(statusCode)
     response.json(dadosCidades)
+
+})
+
+app.get('/v2/senai/cidades', cors(), async function (request, response, next) {
+
+    /**
+     *  Existem 2 opções para recebr variáveis para filtos.
+     *  params - que permite receber a variável na estrutura da URL criada no endpoint (geralmente utilizado para ID (PK))
+     * 
+     *  query - (tambem conheciodo como queryString) que permite receber uma ou muitas variáveis para realizar filtros avançados
+     *
+     */
+
+    let statusCode
+    let dadosCidades = {}
+    
+    let siglaEstado = request.query.uf
+
+    if (siglaEstado == "" || siglaEstado == undefined || siglaEstado.length != 2 || !isNaN(siglaEstado)) {
+        statusCode = 400
+        dadosCidades.message = 'Não foi possível processar, pois os dados de entrada (uf) que forão enviados não corresponde algo exigido, confirme o valor, pois não pode estar vazio, precisa ser caracteres e ter 2 digitos.'
+    } else {
+        let cidades = estadosCidades.getCidades(siglaEstado)
+
+        if (cidades) {
+            statusCode = 200
+            dadosCidades = cidades
+        } else {
+            statusCode = 404
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dadosCidades)
+
 
 })
 
