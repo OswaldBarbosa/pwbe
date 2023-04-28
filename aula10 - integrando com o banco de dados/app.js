@@ -39,7 +39,7 @@ app.use((request, response, next) => {
 
 
 /**
- * Instalação do PRISMA no projeto (biblioteca para conexão com o banco de dados )
+ * instalação do PRISMA no projeto (biblioteca para conexão com o banco de dados )
  * 
  * npm install prisma --save
  * npx prisma
@@ -49,14 +49,15 @@ app.use((request, response, next) => {
  * npx prisma migrate dev - servepara realizar a sincronização entre o prisma e banco de dados
  */
 
+//importe da controller do aluno
+var controllerAlunos = require('./controller/controller_aluno.js');
 
+//defini que os dados que irão chegar no body da requisição será no padrão json
+const bodyParserJSON = bodyParser.json()
 
 //endpoint: retorna todos os dados de alunos
 app.get('/v1/lion-school/aluno/', cors(), async function (request, response) {
-    //Importe da controller do aluno
-    let controllerAlunos = require('./controller/controller_aluno.js')
-
-    //Recebe os dados da controller do aluno
+    //recebe os dados da controller do aluno
     let dadosAlunos = await controllerAlunos.getAlunos()
 
     //verifica se existe registros do alunos
@@ -74,10 +75,7 @@ app.get('/v1/lion-school/aluno/', cors(), async function (request, response) {
 app.get('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
     let idAluno = request.params.id
 
-    //Importe da controller do aluno
-    let controllerAlunos = require('./controller/controller_aluno.js')
-
-    //Recebe os dados da controller do aluno
+    //recebe os dados da controller do aluno
     let dadosAlunos = await controllerAlunos.getBuscarAlunoId(idAluno)
 
     //verifica se existe registros do alunos
@@ -91,8 +89,33 @@ app.get('/v1/lion-school/aluno/:id', cors(), async function (request, response) 
 
 })
 
+//endpoint: retorna o aluno filtrando pelo nome
+app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, response) {
+    let nomeAluno = request.params.nome
+
+    //recebe os dados da controller do aluno
+    let dadosAlunos = await controllerAlunos.getBuscarAlunoNome(nomeAluno)
+
+    //verifica se existe registros do alunos
+    if (dadosAlunos) {
+        response.json(dadosAlunos)
+        response.status(200)
+    } else {
+        response.json()
+        response.status(404)
+    }
+
+})
+
 //endpoint: insere um dado novo
-app.post('/v1/lion-school/aluno/', cors(), async function (request, response) {
+app.post('/v1/lion-school/aluno/', cors(), bodyParserJSON, async function (request, response) {
+    //recebe os dados encaminhados na requisição
+    let dadosBody = request.body
+
+    let resultadoDadosAlunos = await controllerAlunos.novoAluno(dadosBody)
+
+    response.status(resultadoDadosAlunos.status)
+    response.json(resultadoDadosAlunos)
 
 })
 

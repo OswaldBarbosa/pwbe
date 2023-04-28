@@ -6,14 +6,15 @@
  ************************************************************************************
  */
 
+//Importe do arquivo DAO para acessar dados do aluno no banco de dados
+var alunoDAO = require('../model/DAO/alunoDAO.js')
 
+//Importe do arquivo de mensagens
+var message = require('./modulo/config.js')
 
 //retorna a lista de todos os alunos
 const getAlunos = async () => {
     let dadosAlunosJSON = {}
-
-    //Importe do arquivo DAO para acessar dados do aluno no banco de dados
-    let alunoDAO = require('../model/DAO/alunoDAO.js')
 
     //Chama a função do arquivo DAO que irá retorna todos os registros do banco de dados
     let dadosAlunos = await alunoDAO.selectAllAluno()
@@ -34,10 +35,7 @@ const getBuscarAlunoId = async (id) => {
     let idAluno = id
     let dadosAlunosJSON = {}
 
-    //Importe do arquivo DAO para acessar dados do aluno no banco de dados
-    let alunoDAO = require('../model/DAO/alunoDAO.js')
-
-    //Chama a função do arquivo DAO que irá retorna todos os registros do banco de dados
+    //Chama a função do arquivo DAO que irá retorna os alunos pelo id
     let dadosAlunos = await alunoDAO.selectByIdAluno(idAluno)
 
     if (dadosAlunos) {
@@ -50,22 +48,61 @@ const getBuscarAlunoId = async (id) => {
 
 }
 
-//insere um novo aluno
-const novoAluno = (dadosAluno) => {
+const getBuscarAlunoNome = async (nome) => {
+    let nomeAluno = nome
+    let dadosAlunosJSON = {}
 
+    //Chama a função do aqruivo DAO que irá retorna todos os alunos pelo nome
+    let dadosAlunos = await alunoDAO.selectByNameAluno(nomeAluno)
+
+    if (dadosAlunos) {
+        dadosAlunosJSON.quantidade = dadosAlunos.length
+        dadosAlunosJSON.aluno = dadosAlunos
+        return dadosAlunosJSON
+    } else {
+        return false
+    }
+    
+}
+
+//inserir um novo aluno
+const novoAluno = async (dadosAluno) => {
+    let resultDadosAluno
+
+    //Validação para tratar campos obrigatórios e quantidade de caracteres
+    if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 100 ||
+        dadosAluno.rg == '' || dadosAluno.rg == undefined || dadosAluno.rg.length > 15 ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 18 ||
+        dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10 ||
+        dadosAluno.email == '' || dadosAluno.email == undefined || dadosAluno.email.length > 255
+    ) {
+        return message.ERROR_REQUIRED_FIELDS
+    } else {
+        //Envia os dados para a model inserir no banco de dados
+        resultDadosAluno = await alunoDAO.insertAluno(dadosAluno)
+
+        //valida se o banco de dados inseriu corretamente os dados
+        if (resultDadosAluno) {
+            return message.SUCCESS_CREATE_ITEM
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
 }
 
 //atualiza um aluno existente
-const atualizarAluno = (dadosAluno) => {
+const atualizarAluno = async (dadosAluno) => {
 
 }
 
 //deleta um novo aluno existente
-const deletarAluno = (id) => {
+const deletarAluno = async (id) => {
 
 }
 
 module.exports = {
     getAlunos,
-    getBuscarAlunoId
+    getBuscarAlunoId,
+    getBuscarAlunoNome,
+    novoAluno
 }
