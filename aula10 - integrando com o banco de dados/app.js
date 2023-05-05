@@ -49,8 +49,12 @@ app.use((request, response, next) => {
  * npx prisma migrate dev - servepara realizar a sincronização entre o prisma e banco de dados
  */
 
+//Importe do arquivo de mensagens
+var message = require('./controller/modulo/config.js')
+
 //importe da controller do aluno
 var controllerAlunos = require('./controller/controller_aluno.js');
+const { json } = require('body-parser');
 
 //defini que os dados que irão chegar no body da requisição será no padrão json
 const bodyParserJSON = bodyParser.json()
@@ -109,24 +113,55 @@ app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, res
 
 //endpoint: insere um dado novo
 app.post('/v1/lion-school/aluno/', cors(), bodyParserJSON, async function (request, response) {
-    //recebe os dados encaminhados na requisição
-    let dadosBody = request.body
+    let contentType = request.headers['content-type']
 
-    let resultadoDadosAlunos = await controllerAlunos.novoAluno(dadosBody)
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
 
-    response.status(resultadoDadosAlunos.status)
-    response.json(resultadoDadosAlunos)
+        //encaminha os dados para controller
+        let resultadoDadosAlunos = await controllerAlunos.novoAluno(dadosBody)
 
+        response.status(resultadoDadosAlunos.status)
+        response.json(resultadoDadosAlunos)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 //endpoint: atualiza um aluno existente filtrando pelo ID
-app.put('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+app.put('/v1/lion-school/aluno/:id', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
 
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+        //recebe o id do aluno pelo parametro
+        let idAluno = request.params.id
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        //encaminha os dados para controller
+        let resultadoDadosAlunos = await controllerAlunos.atualizarAluno(dadosBody, idAluno)
+
+        response.status(resultadoDadosAlunos.status)
+        response.json(resultadoDadosAlunos)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 //endpoint: deleta um aluno existente filtrando pelo ID
 app.delete('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+    let idAluno = request.params.id
+    let resultadoDadosAlunos
 
+    resultadoDadosAlunos = await controllerAlunos.deletarAluno(idAluno)
+
+    response.status(resultadoDadosAlunos.status)
+    response.json(resultadoDadosAlunos)
 })
 
 app.listen(8080, function () {

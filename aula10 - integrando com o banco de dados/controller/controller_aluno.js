@@ -35,34 +35,40 @@ const getBuscarAlunoId = async (id) => {
     let idAluno = id
     let dadosAlunosJSON = {}
 
-    //Chama a função do arquivo DAO que irá retorna os alunos pelo id
-    let dadosAlunos = await alunoDAO.selectByIdAluno(idAluno)
-
-    if (dadosAlunos) {
-        dadosAlunosJSON.quantidade = dadosAlunos.length
-        dadosAlunosJSON.aluno = dadosAlunos
-        return dadosAlunosJSON
+    if (idAluno == "" || idAluno == undefined || isNaN(idAluno)) {
+        return message.ERROR_INVALID_ID
     } else {
-        return false
-    }
+        //Chama a função do arquivo DAO que irá retorna os alunos pelo id
+        let dadosAlunos = await alunoDAO.selectByIdAluno(idAluno)
 
+        if (dadosAlunos) {
+            dadosAlunosJSON.quantidade = dadosAlunos.length
+            dadosAlunosJSON.aluno = dadosAlunos
+            return dadosAlunosJSON
+        } else {
+            return false
+        }
+    }
 }
 
 const getBuscarAlunoNome = async (nome) => {
     let nomeAluno = nome
     let dadosAlunosJSON = {}
 
-    //Chama a função do aqruivo DAO que irá retorna todos os alunos pelo nome
-    let dadosAlunos = await alunoDAO.selectByNameAluno(nomeAluno)
-
-    if (dadosAlunos) {
-        dadosAlunosJSON.quantidade = dadosAlunos.length
-        dadosAlunosJSON.aluno = dadosAlunos
-        return dadosAlunosJSON
+    if (nomeAluno == "" || nomeAluno == undefined || isNaN(nomeAluno)) {
+        return message.ERROR_INVALID_ID
     } else {
-        return false
+        //Chama a função do aqruivo DAO que irá retorna todos os alunos pelo nome
+        let dadosAlunos = await alunoDAO.selectByNameAluno(nomeAluno)
+
+        if (dadosAlunos) {
+            dadosAlunosJSON.quantidade = dadosAlunos.length
+            dadosAlunosJSON.aluno = dadosAlunos
+            return dadosAlunosJSON
+        } else {
+            return false
+        }
     }
-    
 }
 
 //inserir um novo aluno
@@ -91,18 +97,57 @@ const novoAluno = async (dadosAluno) => {
 }
 
 //atualiza um aluno existente
-const atualizarAluno = async (dadosAluno) => {
+const atualizarAluno = async (dadosAluno, idAluno) => {
+    let resultDadosAluno
 
+    //Validação para tratar campos obrigatórios e quantidade de caracteres
+    if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 100 ||
+        dadosAluno.rg == '' || dadosAluno.rg == undefined || dadosAluno.rg.length > 15 ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 18 ||
+        dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10 ||
+        dadosAluno.email == '' || dadosAluno.email == undefined || dadosAluno.email.length > 255
+    ) {
+        return message.ERROR_REQUIRED_FIELDS //status code 400
+        //Validação de ID incorreto ou não informado
+    } else if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
+        return message.ERROR_INVALID_ID //status code 400
+    } else {
+        dadosAluno.id = idAluno
+
+        //encaminha os dados para a model do aluno
+        resultDadosAluno = await alunoDAO.updateAluno(dadosAluno)
+
+        if (resultDadosAluno) {
+            return message.SUCCESS_UPDATE_ITEM //200
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
 }
 
 //deleta um novo aluno existente
 const deletarAluno = async (id) => {
+    let idAluno = id
+    let resultDadosAluno
 
+    if (idAluno == "" || idAluno == undefined || isNaN(idAluno)) {
+        return message.ERROR_INVALID_ID
+    } else {
+        resultDadosAluno = await alunoDAO.deleteAluno(idAluno)
+
+        if (resultDadosAluno) {
+            return message.SUCCESS_DELETE_ITEM
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
 }
 
 module.exports = {
     getAlunos,
     getBuscarAlunoId,
     getBuscarAlunoNome,
-    novoAluno
+    novoAluno,
+    atualizarAluno,
+    deletarAluno
 }

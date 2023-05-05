@@ -13,14 +13,33 @@
 
 const ERROR_REQUIRED_FIELDS = {status: 400, message: 'Campos obrigatórios não foram preenchidos.'}
 
+const ERROR_INVALID_ID = {status: 400, message: 'O ID informado na requisição não é válido ou não foi encaminhado.'}
+
+const ERROR_ID_NOT_EXIST = {status: 404, message: 'O ID informado é válido, mas não existe.'}
+
 const ERROR_INTERNAL_SERVER = {status: 500, message: 'Devido a um erro interno no servidor, não foi possível processar a requisição.'}
+
+const ERROR_INVALID_CONTENT_TYPE = {status: 415, message: 'O tipo de mídia Content-type da solicitação não é compatível com o servidor. Tipo aceito:[application/json]'}
+
+/******************************************************** MENSAGENS DE ERRO ********************************************************/
 
 /******************************************************** MENSAGENS DE SUCESSO ********************************************************/
 
 const SUCCESS_CREATE_ITEM = {status:201, message: 'Item criado com sucesso.'}
 
+const SUCCESS_UPDATE_ITEM = {status:200, message: 'Item atualizado com sucesso.'}
+
+const SUCCESS_DELETE_ITEM = {status:200, message: 'Item apagado com sucesso.'}
+
+/******************************************************** MENSAGENS DE SUCESSO ********************************************************/
+
 module.exports = {
     ERROR_REQUIRED_FIELDS,
+    ERROR_INTERNAL_SERVER,
+    ERROR_INVALID_ID,
+    ERROR_INVALID_CONTENT_TYPE,
+    ERROR_ID_NOT_EXIST,
     SUCCESS_CREATE_ITEM,
-    ERROR_INTERNAL_SERVER
+    SUCCESS_UPDATE_ITEM,
+    SUCCESS_DELETE_ITEM
 }

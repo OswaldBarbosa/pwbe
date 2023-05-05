@@ -94,18 +94,47 @@ const insertAluno = async (dadosAluno) => {
 }
 
 //atualizar dados do aluno no banco de dados
-const updateAluno = () => {
+const updateAluno = async (dadosAluno) => {
+    //Script para atualizar dados
+    let sql = `update tbl_aluno set
+        nome = '${dadosAluno.nome}',
+        rg = '${dadosAluno.rg}',
+        cpf = '${dadosAluno.cpf}',
+        data_nascimento = '${dadosAluno.data_nascimento}',
+        email = '${dadosAluno.email}'
+    where id = ${dadosAluno.id}`
 
+    //Executa o script sql no banco de dados
+    let resultStatus = await prisma.$executeRawUnsafe(sql)
+
+    if (resultStatus) {
+        return true
+    } else {
+        return false
+    }
 }
 
 //deletar dados do aluno no banco de dados
-const deleteAluno = (id) => {
+const deleteAluno = async (id) => {
+    let idAluno = id
+    //Script para deletar dados
+    let sql = 'delete from tbl_aluno where id =' + idAluno
 
+    //Executa o script sql no banco de dados
+    let resultStatus = await prisma.$queryRawUnsafe(sql)
+
+    if (resultStatus) {
+        return true
+    } else {
+        return false
+    }
 }
 
 module.exports = {
     selectAllAluno,
     selectByIdAluno,
     selectByNameAluno,
-    insertAluno
+    insertAluno,
+    updateAluno,
+    deleteAluno
 }
