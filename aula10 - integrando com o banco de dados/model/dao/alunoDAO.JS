@@ -31,11 +31,11 @@ const selectAllAluno = async () => {
 }
 
 //retorna dados do aluno no banco de dados pelo id
-const selectByIdAluno = async (id) => {
+const selectAlunoById = async (id) => {
     let idAluno = id
 
     //Script para filtar os alunos pelo id
-    let sql = 'select * from tbl_aluno where id =' + idAluno
+    let sql = `select * from tbl_aluno where id = ${idAluno}`
 
     let rsAlunos = await prisma.$queryRawUnsafe(sql)
 
@@ -45,11 +45,10 @@ const selectByIdAluno = async (id) => {
     } else {
         return false
     }
-
 }
 
 //retorna dados do aluno no banco de dados pelo nome
-const selectByNameAluno = async (nome) => {
+const selectAlunoByName = async (nome) => {
     let nomeAluno = nome
 
     //Script para filtar o aluno pelo nome
@@ -68,7 +67,7 @@ const selectByNameAluno = async (nome) => {
 
 //inserir dados do aluno no banco de dados
 const insertAluno = async (dadosAluno) => {
-    //Script para inserir dados
+    //script para inserir dados
     let sql = `insert into tbl_aluno (
         nome,
         rg,
@@ -83,11 +82,27 @@ const insertAluno = async (dadosAluno) => {
         '${dadosAluno.email}'
         )`
 
-    //Executa o script sql no banco de dados
+    //executa o script sql no banco de dados
     let resultStatus = await prisma.$executeRawUnsafe(sql)
 
     if (resultStatus) {
         return true
+    } else {
+        return false
+    }
+}
+
+//retorna o ultitmo ID inserido na banco de dados
+const selectLastId = async () => {
+
+    //script para pegar o ulyimo ID inserido na tabela de alunos
+    let sql = `select * from tbl_aluno order by id desc limit 1;`
+
+    //executa o script sql no banco de dados
+    let resultStatus = await prisma.$queryRawUnsafe(sql)
+
+    if (resultStatus.length > 0) {
+        return resultStatus
     } else {
         return false
     }
@@ -132,9 +147,10 @@ const deleteAluno = async (id) => {
 
 module.exports = {
     selectAllAluno,
-    selectByIdAluno,
-    selectByNameAluno,
+    selectAlunoById,
+    selectAlunoByName,
     insertAluno,
+    selectLastId,
     updateAluno,
     deleteAluno
 }
