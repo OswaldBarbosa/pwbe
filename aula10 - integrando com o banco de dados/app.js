@@ -46,7 +46,7 @@ app.use((request, response, next) => {
  * npx prisma init
  * npm install @prisma/client --save
  * 
- * npx prisma migrate dev - servepara realizar a sincronização entre o prisma e banco de dados
+ * npx prisma migrate dev - serve para realizar a sincronização entre o prisma e banco de dados
  */
 
 //Importe do arquivo de mensagens

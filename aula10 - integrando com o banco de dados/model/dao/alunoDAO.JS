@@ -67,14 +67,15 @@ const selectAlunoByName = async (nome) => {
 
 //inserir dados do aluno no banco de dados
 const insertAluno = async (dadosAluno) => {
-    //script para inserir dados
+
+    //script para inserir dados'
     let sql = `insert into tbl_aluno (
         nome,
         rg,
         cpf,
         data_nascimento,
         email
-        ) values (
+        ) values (      
         '${dadosAluno.nome}',
         '${dadosAluno.rg}',
         '${dadosAluno.cpf}',
@@ -95,7 +96,7 @@ const insertAluno = async (dadosAluno) => {
 //retorna o ultitmo ID inserido na banco de dados
 const selectLastId = async () => {
 
-    //script para pegar o ulyimo ID inserido na tabela de alunos
+    //script para pegar o ultimo ID inserido na tabela de alunos
     let sql = `select * from tbl_aluno order by id desc limit 1;`
 
     //executa o script sql no banco de dados

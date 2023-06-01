@@ -63,7 +63,7 @@ const getBuscarAlunoNome = async (nomeAluno) => {
     let dadosAlunosJSON = {}
 
     if (nomeAluno == "" || nomeAluno == undefined || !isNaN(nomeAluno)) {
-        return message.ERROR_INVALID_NAME
+        return message.ERROR_INVALID_NAME                   
     } else {
 
         //chama a função do arquivo DAO que irá retorna um aluno pelo nome
@@ -103,7 +103,7 @@ const novoAluno = async (dadosAluno) => {
         //valida se o banco de dados inseriu corretamente os dados
         if (resultDadosAluno) {
 
-            //chama a função que vai encontar o ID gerado após o insert
+                        
             let novoAluno = await alunoDAO.selectLastId()
 
             let dadosAlunosJSON = {}
